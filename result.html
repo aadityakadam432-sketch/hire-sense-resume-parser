@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Resume Result{% endblock %}
+{% block content %}
+<div class="result-head">
+  <div><p class="eyebrow">Parsed resume</p><h1>{{ resume.parsed.name or "Unnamed Candidate" }}</h1><p>{{ resume.filename }}</p></div>
+  <div class="score">{{ resume.score.overall }}<small>/100</small></div>
+</div>
+
+<div class="grid">
+  <section class="card">
+    <h2>Contact</h2>
+    <p><b>Email:</b> {{ resume.parsed.email or "Not detected" }}</p>
+    <p><b>Phone:</b> {{ resume.parsed.phone or "Not detected" }}</p>
+    {% if resume.parsed.links %}<p><b>Links:</b></p>{% for link in resume.parsed.links %}<p class="link">{{ link }}</p>{% endfor %}{% endif %}
+  </section>
+  <section class="card">
+    <h2>Skills</h2>
+    <div class="chips">{% for skill in resume.parsed.skills %}<span>{{ skill }}</span>{% else %}<em>No skills detected</em>{% endfor %}</div>
+  </section>
+</div>
+
+{% for title, items in [("Education", resume.parsed.education), ("Experience", resume.parsed.experience), ("Projects", resume.parsed.projects), ("Certifications", resume.parsed.certifications)] %}
+<section class="card">
+  <h2>{{ title }}</h2>
+  {% if items %}<ul>{% for item in items %}<li>{{ item }}</li>{% endfor %}</ul>{% else %}<p class="muted">No {{ title|lower }} detected.</p>{% endif %}
+</section>
+{% endfor %}
+
+<section class="card">
+  <h2>ATS / Resume Analysis</h2>
+  <p><b>Base quality score:</b> {{ resume.score.base_score }}/100</p>
+  {% if resume.score.job_match_score is not none %}
+    <p><b>Job match score:</b> {{ resume.score.job_match_score }}/100</p>
+    <p><b>Matched:</b> {{ resume.score.matched_skills|join(", ") or "None" }}</p>
+    <p><b>Missing:</b> {{ resume.score.missing_skills|join(", ") or "None" }}</p>
+  {% endif %}
+  <h3>Suggestions</h3>
+  <ul>{% for item in resume.score.suggestions %}<li>{{ item }}</li>{% else %}<li>Looks good. Keep tailoring the resume to each role.</li>{% endfor %}</ul>
+</section>
+{% endblock %}

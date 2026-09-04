@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}Resume History{% endblock %}
+{% block content %}
+<div class="result-head"><div><p class="eyebrow">Database</p><h1>Parsed resumes</h1></div></div>
+<section class="card">
+<table>
+<thead><tr><th>ID</th><th>Candidate</th><th>Email</th><th>File</th><th>Date</th><th></th></tr></thead>
+<tbody>
+{% for r in resumes %}
+<tr><td>{{ r.id }}</td><td>{{ r.name or "—" }}</td><td>{{ r.email or "—" }}</td><td>{{ r.filename }}</td><td>{{ r.created_at }}</td><td><a class="table-link" href="{{ url_for('result', resume_id=r.id) }}">View</a></td></tr>
+{% else %}<tr><td colspan="6">No resumes parsed yet.</td></tr>{% endfor %}
+</tbody>
+</table>
+</section>
+{% endblock %}

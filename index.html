@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Upload Resume{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">AI-ready resume intelligence</p>
+  <h1>HireSense — Smart Resume Analysis</h1>
+  <p>Analyze resumes, extract skills, calculate ATS scores, and compare candidates with job descriptions.</p>
+</section>
+
+<form class="card upload" action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data">
+  <label class="drop">
+    <span>📄</span>
+    <strong>Select resume</strong>
+    <small>PDF, DOCX or TXT • max 5 MB</small>
+    <input type="file" name="resume" accept=".pdf,.docx,.txt" required>
+  </label>
+  <label>
+    <span>Optional Job Description</span>
+    <textarea name="job_description" rows="7" placeholder="Paste a job description here to calculate a skill-match score..."></textarea>
+  </label>
+  <button type="submit">Parse Resume →</button>
+</form>
+{% endblock %}
